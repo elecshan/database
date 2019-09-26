@@ -1,0 +1,3 @@
+/home/xgs/Scripts/C/Database/build/CMakeFiles/rebuild_cache.dir
+/home/xgs/Scripts/C/Database/build/CMakeFiles/db.dir
+/home/xgs/Scripts/C/Database/build/CMakeFiles/edit_cache.dir
