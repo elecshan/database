@@ -16,9 +16,21 @@ typedef struct InputBuffer {
     size_t pos;
 } InputBuffer;
 
-struct InputBuffer* new_input_buffer()
+typedef enum {
+    STATEMENT_INSERT,
+    STATEMENT_SELECT
+} StatementType;
+
+typedef struct Statement {
+    StatementType type;
+} Statement;
+
+static struct InputBuffer* new_input_buffer()
 {
     struct InputBuffer* input_buffer = (struct InputBuffer*)malloc(sizeof(struct InputBuffer));
+    if (input_buffer == nullptr)
+        exit(EXIT_FAILURE);
+
     input_buffer->buf = nullptr;
     input_buffer->len = 0;
     input_buffer->pos = 0;
@@ -26,7 +38,7 @@ struct InputBuffer* new_input_buffer()
     return input_buffer;
 }
 
-void close_input_buffer(struct InputBuffer* input_buffer)
+static void close_input_buffer(struct InputBuffer* input_buffer)
 {
     free(input_buffer->buf);
     free(input_buffer);
