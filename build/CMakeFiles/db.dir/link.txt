@@ -1,1 +1,0 @@
-g++   -g -g  -rdynamic CMakeFiles/db.dir/command.cpp.o CMakeFiles/db.dir/main.cpp.o CMakeFiles/db.dir/sds.cpp.o  -o ../bin/db 
