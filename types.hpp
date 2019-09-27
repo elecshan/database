@@ -8,6 +8,8 @@ extern "C" {
 #include <cstdlib>
 #include <cstdio>
 
+#include "db.hpp"
+
 #define BUF_READ_SIZE 1024
 
 typedef struct InputBuffer {
@@ -23,6 +25,7 @@ typedef enum {
 
 typedef struct Statement {
     StatementType type;
+    Row row_to_insert;
 } Statement;
 
 static struct InputBuffer* new_input_buffer()

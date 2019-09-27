@@ -33,10 +33,10 @@ void read_input(InputBuffer* buffer)
         pos++;
     }
 
-    if (pos <= 0) {
-        printf("Error reading input\n");
-        exit(EXIT_FAILURE);
-    }
+    // if (pos <= 0) {
+    //     printf("Error reading input\n");
+    //     exit(EXIT_FAILURE);
+    // }
 
     buffer->buf[pos++] = '\0';
     buffer->len = len;
@@ -46,16 +46,17 @@ void read_input(InputBuffer* buffer)
 int main()
 {
     InputBuffer* input_buffer = new_input_buffer();
+    Table* table = new_table();
 
     while(true) {
         print_prompt();
         read_input(input_buffer);
 
-        if (input_buffer->buf == nullptr)
+        if (input_buffer->buf == nullptr || input_buffer->buf[0] == '\0')
             continue;
 
         if (input_buffer->buf[0] == '.') {
-            switch (do_meta_command(input_buffer))
+            switch (do_meta_command(input_buffer, table))
             {
             case (META_COMMAND_SUCCESS):
                 continue;
@@ -72,6 +73,18 @@ int main()
         {
         case (PREPARE_SUCCESS):
             break;
+        case (PREPARE_SYNTAX_ERROR):
+            printf("Syntax error. Could not parse statement.\n");
+            continue;
+        case (PREPARE_STRING_TOO_LONG):
+            printf("String is too long.\n");
+            continue;
+        case (PREPARE_NEGATIVE_ID):
+            printf("ID must be positive.\n");
+            continue;
+        case (PREPARE_EMAIL_ERROR):
+            printf("Email address error.\n");
+            continue;
         case (PREPARE_UNRECOGNIZED_STATEMENT):
             printf("Unrecognized keyword at start of '%s'.\n", input_buffer->buf);
             continue;
@@ -79,7 +92,14 @@ int main()
             break;
         }
 
-        execute_statement(&statement);
-        printf("Excuted.\n");
+        switch (execute_statement(&statement, table))
+        {
+        case (EXECUTE_SUCCESS):
+            printf("Excuted.\n");
+            break;
+        case (EXECUTE_TABLE_FULL):
+            printf("ERROR: Table full.\n");
+            break;
+        }
     }
 }
