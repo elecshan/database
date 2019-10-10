@@ -5,6 +5,7 @@
 #include "sds.hpp"
 #include "types.hpp"
 #include "command.hpp"
+#include "db.hpp"
 
 void print_prompt()
 {
@@ -43,10 +44,16 @@ void read_input(InputBuffer* buffer)
     buffer->pos = pos;
 }
 
-int main()
+int main(int argc, char* argv[])
 {
+    if (argc < 2) {
+        printf("Must supply a database filename.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    char* filename = argv[1];
     InputBuffer* input_buffer = new_input_buffer();
-    Table* table = new_table();
+    Table* table = db_open(filename);
 
     while(true) {
         print_prompt();
